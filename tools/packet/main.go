@@ -65,5 +65,6 @@ func (p *EtherCATPacket) Send(handle *pcap.Handle, options gopacket.SerializeOpt
 		return []byte{}, err
 	}
 
+	p.Ecat = ethercat.NewEtherCAT()
 	return data, nil
 }
