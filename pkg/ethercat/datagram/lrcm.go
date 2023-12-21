@@ -8,8 +8,8 @@ package datagram
 //
 // --------------------------------------------
 type Lrcm struct {
-	M   uint16 // M: 1 bit (More EtherCAT Data)
-	C   uint16 // C: 1 bit (Circulating Frame)
+	M   bool   // M: 1 bit (More EtherCAT Data)
+	C   bool   // C: 1 bit (Circulating Frame)
 	R   uint16 // R: 3 bit (Reserved)
 	Len uint16 // Len: 11 bits (Paylod Length)
 }
@@ -24,7 +24,7 @@ type Lrcm struct {
 // Returns:
 //   - Lrcm: New Lrcm instance
 //   - error: An error is returned if the provided values are out of valid range.
-func NewLrcm(isMore uint16, isCirculating uint16, len uint16) Lrcm {
+func NewLrcm(isMore bool, isCirculating bool, len uint16) Lrcm {
 	return Lrcm{Len: len, R: 0, C: isCirculating, M: isMore}
 }
 
@@ -36,8 +36,8 @@ func NewLrcm(isMore uint16, isCirculating uint16, len uint16) Lrcm {
 // Returns:
 //   - Lrcm: New Lrcm instance
 func NEWLrcmFromUint16(l uint16) Lrcm {
-	m := (l & 0b1000000000000000) >> 15
-	c := (l & 0b0100000000000000) >> 14
+	m := 1 == (l&0b1000000000000000)>>15
+	c := 1 == (l&0b0100000000000000)>>14
 	r := (l & 0b0011100000000000) >> 11
 	len := (l & 0b0000011111111111)
 
@@ -49,8 +49,16 @@ func NEWLrcmFromUint16(l uint16) Lrcm {
 // Returns:
 //   - uint16: The uint16 value representing Lrcm fields.
 func (Lrcm Lrcm) Uint16() uint16 {
-	mBits := Lrcm.M << 15
-	cBits := Lrcm.C << 14
+	mBits := uint16(0)
+	if Lrcm.M {
+		mBits = 0b1000000000000000
+	}
+
+	cBits := uint16(0)
+	if Lrcm.C {
+		mBits = 0b0100000000000000
+	}
+
 	rBits := Lrcm.R << 11
 
 	return mBits | cBits | rBits | Lrcm.Len

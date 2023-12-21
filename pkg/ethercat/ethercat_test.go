@@ -11,12 +11,11 @@ import (
 
 func TestEcatBytes(t *testing.T) {
 	// given
-	lrcm := datagram.NewLrcm(0, 0, 8)
 	ecatDatagram := datagram.Datagram{
 		Command: command.APRD,
 		Index:   uint8(0x29),
 		Address: uint32(0xffff0008),
-		LRCM:    lrcm,
+		LRCM:    datagram.NewLrcm(false, false, 8),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00, 0x18, 0x30, 0x00, 0x26, 0x00, 0x01, 0x00},
 		WKC:     uint16(0x0000),
