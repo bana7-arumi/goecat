@@ -38,12 +38,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	lrcm := datagram.NewLrcm(0, 0, 1)
 	ecatDatagram := datagram.Datagram{
 		Command: command.BRD,
 		Index:   uint8(0x00),
 		Address: uint32(0x00000000),
-		LRCM:    lrcm,
+		LRCM:    datagram.NewLrcm(false, false, 1),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00},
 		WKC:     uint16(0x0000),
