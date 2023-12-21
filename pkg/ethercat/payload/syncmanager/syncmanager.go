@@ -39,15 +39,15 @@ func (s SyncManager) Bytes() []byte {
 
 // CtrlStatus represents the control status with various bit fields.
 type CtrlStatus struct {
-	InVisibleBuffer         uint16 // [3:4]
-	VisibleBufferBufferStat uint16 // [5]
-	CanReadIRQ              bool   // [7]
-	CanWriteIRQ             bool   // [8]
-	IsTriggerWatchdog       bool   // [10]
-	IsPdiIRQ                bool   // [11]
-	IsEcatIRQ               bool   // [12]
-	Access                  uint16 // [13:14]
-	OpMode                  uint16 // [15:16]
+	InVisibleBufferState     uint16 // [3:4]
+	VisibleBufferBufferState uint16 // [5]
+	CanReadIRQ               bool   // [7]
+	CanWriteIRQ              bool   // [8]
+	IsTriggerWatchdog        bool   // [10]
+	IsPdiIRQ                 bool   // [11]
+	IsEcatIRQ                bool   // [12]
+	Access                   uint16 // [13:14]
+	OpMode                   uint16 // [15:16]
 }
 
 // NewCtrlStatusFromUint16 creates a CtrlStatus from a uint16 value.
@@ -56,8 +56,8 @@ type CtrlStatus struct {
 // Returns:
 //   - *CtrlStatus: A pointer to the created CtrlStatus.
 func NewCtrlStatusFromUint16(ctrlStatus uint16) *CtrlStatus {
-	inVisibleBuffer := (ctrlStatus & 0b0011000000000000) >> 12
-	visibleBuffer := (ctrlStatus & 0b0000100000000000) >> 11
+	inVisibleBufferState := (ctrlStatus & 0b0011000000000000) >> 12
+	visibleBufferState := (ctrlStatus & 0b0000100000000000) >> 11
 	canReadIRQ := (ctrlStatus & 0b0000001000000000) == 0b0000001000000000
 	canWriteIRQ := (ctrlStatus & 0b0000000100000000) == 0b0000000100000000
 	isTriggerWatchdog := (ctrlStatus & 0b0000000001000000) == 0b0000000001000000
@@ -67,15 +67,15 @@ func NewCtrlStatusFromUint16(ctrlStatus uint16) *CtrlStatus {
 	opMode := ctrlStatus & 0b00000000000011
 
 	return &CtrlStatus{
-		InVisibleBuffer:         inVisibleBuffer,
-		VisibleBufferBufferStat: visibleBuffer,
-		CanReadIRQ:              canReadIRQ,
-		CanWriteIRQ:             canWriteIRQ,
-		IsTriggerWatchdog:       isTriggerWatchdog,
-		IsPdiIRQ:                isPdiIRQ,
-		IsEcatIRQ:               isEcatIRQ,
-		Access:                  access,
-		OpMode:                  opMode,
+		InVisibleBufferState:     inVisibleBufferState,
+		VisibleBufferBufferState: visibleBufferState,
+		CanReadIRQ:               canReadIRQ,
+		CanWriteIRQ:              canWriteIRQ,
+		IsTriggerWatchdog:        isTriggerWatchdog,
+		IsPdiIRQ:                 isPdiIRQ,
+		IsEcatIRQ:                isEcatIRQ,
+		Access:                   access,
+		OpMode:                   opMode,
 	}
 }
 
@@ -85,8 +85,8 @@ func NewCtrlStatusFromUint16(ctrlStatus uint16) *CtrlStatus {
 // Returns:
 //   - uint16: The uint16 representation of the CtrlStatus.
 func (c CtrlStatus) ToUint16() uint16 {
-	inVisibleBufferBits := (c.InVisibleBuffer << 12) & 0b0011000000000000
-	visibleBufferBits := (c.VisibleBufferBufferStat << 11) & 0b0000100000000000
+	inVisibleBufferBits := (c.InVisibleBufferState << 12) & 0b0011000000000000
+	visibleBufferBits := (c.VisibleBufferBufferState << 11) & 0b0000100000000000
 	canReadIRQBits := uint16(0)
 	if c.CanReadIRQ {
 		canReadIRQBits = 0b0000001000000000

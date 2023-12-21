@@ -26,15 +26,15 @@ func TestSyncManagerBytes(t *testing.T) {
 func TestNewCtrlStatusFromUint16(t *testing.T) {
 	ctrlStatusValue := uint16(0b0011101001010110) // Example CtrlStatus value
 	expectedCtrlStatus := &syncmanager.CtrlStatus{
-		InVisibleBuffer:         3,
-		VisibleBufferBufferStat: 1,
-		CanReadIRQ:              true,
-		CanWriteIRQ:             false,
-		IsTriggerWatchdog:       true,
-		IsPdiIRQ:                false,
-		IsEcatIRQ:               true,
-		Access:                  1,
-		OpMode:                  2,
+		InVisibleBufferState:     3,
+		VisibleBufferBufferState: 1,
+		CanReadIRQ:               true,
+		CanWriteIRQ:              false,
+		IsTriggerWatchdog:        true,
+		IsPdiIRQ:                 false,
+		IsEcatIRQ:                true,
+		Access:                   1,
+		OpMode:                   2,
 	}
 
 	resultCtrlStatus := syncmanager.NewCtrlStatusFromUint16(ctrlStatusValue)
@@ -46,15 +46,15 @@ func TestNewCtrlStatusFromUint16(t *testing.T) {
 
 func TestCtrlStatusToUint16(t *testing.T) {
 	ctrlStatus := syncmanager.CtrlStatus{
-		InVisibleBuffer:         3,
-		VisibleBufferBufferStat: 1,
-		CanReadIRQ:              true,
-		CanWriteIRQ:             false,
-		IsTriggerWatchdog:       true,
-		IsPdiIRQ:                false,
-		IsEcatIRQ:               true,
-		Access:                  1,
-		OpMode:                  2,
+		InVisibleBufferState:     3,
+		VisibleBufferBufferState: 1,
+		CanReadIRQ:               true,
+		CanWriteIRQ:              false,
+		IsTriggerWatchdog:        true,
+		IsPdiIRQ:                 false,
+		IsEcatIRQ:                true,
+		Access:                   1,
+		OpMode:                   2,
 	}
 
 	expected := uint16(0b0011101001010110) // Expected CtrlStatus value
