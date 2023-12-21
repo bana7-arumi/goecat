@@ -51,12 +51,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	lrcm := datagram.NewLrcm(0, 0, 1)
 	ecatDatagram := datagram.Datagram{
 		Command: command.BRD,
 		Index:   uint8(0x00),
 		Address: uint32(0x00000000),
-		LRCM:    lrcm,
+		LRCM:    datagram.NewLrcm(false, false, 1),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00},
 		WKC:     uint16(0x0000),
@@ -115,34 +114,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	lrcm1 := datagram.NewLrcm(1, 0, 1)
 	ecatDatagram1 := datagram.Datagram{
 		Command: command.LRD,
 		Index:   uint8(0x00),
 		Address: uint32(0x00000000),
-		LRCM:    lrcm1,
+		LRCM:    datagram.NewLrcm(true, false, 1),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00},
 		WKC:     uint16(0x0000),
 	}
 
-	lrcm2 := datagram.NewLrcm(1, 0, 1)
 	ecatDatagram2 := datagram.Datagram{
 		Command: command.LRD,
 		Index:   uint8(0x00),
 		Address: uint32(0x00000000),
-		LRCM:    lrcm2,
+		LRCM:    datagram.NewLrcm(true, false, 1),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00},
 		WKC:     uint16(0x0000),
 	}
 
-	lrcm3 := datagram.NewLrcm(0, 0, 1)
 	ecatDatagram3 := datagram.Datagram{
 		Command: command.LRD,
 		Index:   uint8(0x00),
 		Address: uint32(0x00000000),
-		LRCM:    lrcm3,
+		LRCM:    datagram.NewLrcm(false, false, 1),
 		IRQ:     uint16(0x0000),
 		Data:    []byte{0x00},
 		WKC:     uint16(0x0000),
