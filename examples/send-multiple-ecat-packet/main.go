@@ -8,6 +8,7 @@ import (
 
 	"github.com/Aruminium/goecat/pkg/ethercat/command"
 	"github.com/Aruminium/goecat/pkg/ethercat/datagram"
+	"github.com/Aruminium/goecat/pkg/ethercat/payload"
 	"github.com/Aruminium/goecat/tools/packet"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
@@ -44,7 +45,7 @@ func main() {
 		Address: uint32(0x00000000),
 		LRCM:    datagram.NewLrcm(true, false, 1),
 		IRQ:     uint16(0x0000),
-		Data:    []byte{0x00},
+		Data:    payload.BasicPayload{Data: []byte{0x00}},
 		WKC:     uint16(0x0000),
 	}
 
@@ -54,7 +55,7 @@ func main() {
 		Address: uint32(0x00000000),
 		LRCM:    datagram.NewLrcm(true, false, 1),
 		IRQ:     uint16(0x0000),
-		Data:    []byte{0x00},
+		Data:    payload.BasicPayload{Data: []byte{0x00}},
 		WKC:     uint16(0x0000),
 	}
 
@@ -64,7 +65,7 @@ func main() {
 		Address: uint32(0x00000000),
 		LRCM:    datagram.NewLrcm(false, false, 1),
 		IRQ:     uint16(0x0000),
-		Data:    []byte{0x00},
+		Data:    payload.BasicPayload{Data: []byte{0x00}},
 		WKC:     uint16(0x0000),
 	}
 
