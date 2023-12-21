@@ -36,8 +36,8 @@ func NewLrcm(isMore bool, isCirculating bool, len uint16) Lrcm {
 // Returns:
 //   - Lrcm: New Lrcm instance
 func NEWLrcmFromUint16(l uint16) Lrcm {
-	m := 1 == (l&0b1000000000000000)>>15
-	c := 1 == (l&0b0100000000000000)>>14
+	m := (l&0b1000000000000000)>>15 == 1
+	c := (l&0b0100000000000000)>>14 == 1
 	r := (l & 0b0011100000000000) >> 11
 	len := (l & 0b0000011111111111)
 

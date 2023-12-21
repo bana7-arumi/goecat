@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 
 	"github.com/Aruminium/goecat/pkg/ethercat/command"
+	"github.com/Aruminium/goecat/pkg/ethercat/payload"
 )
 
 // EcatDatagram represents an EtherCAT datagram.
@@ -13,13 +14,13 @@ import (
 // IRQ (EtherCAT Event Request registers of all slaves combined with a logical OR),
 // data for read/write operations, and the working counter.
 type Datagram struct {
-	Command command.Type // EtherCAT Command Type
-	Index   uint8        // The index is a numeric identifier used by the master for identification of duplicates/lost datagrams. It shall not be changed by EtherCAT slaves
-	Address uint32       // Address (Auto Increment, Configured Station Address, or Logical Address)
-	LRCM    Lrcm         // LRCM represents the Len, R, C, M fields in the EtherCAT Datagram header.
-	IRQ     uint16       // EtherCAT Event Request registers of all slaves combined with a logical OR
-	Data    []byte       // Read/Write Data
-	WKC     uint16       // Working Counter
+	Command command.Type          // EtherCAT Command Type
+	Index   uint8                 // The index is a numeric identifier used by the master for identification of duplicates/lost datagrams. It shall not be changed by EtherCAT slaves
+	Address uint32                // Address (Auto Increment, Configured Station Address, or Logical Address)
+	LRCM    Lrcm                  // LRCM represents the Len, R, C, M fields in the EtherCAT Datagram header.
+	IRQ     uint16                // EtherCAT Event Request registers of all slaves combined with a logical OR
+	Data    payload.MarshalerByte // Read/Write Data
+	WKC     uint16                // Working Counter
 }
 
 // Bytes returns the byte representation of the EtherCAT datagram.
@@ -48,7 +49,7 @@ func (e Datagram) Bytes() []byte {
 	binary.BigEndian.PutUint16(irqBytes, e.IRQ)
 	result = append(result, irqBytes...)
 
-	result = append(result, e.Data...)
+	result = append(result, e.Data.Bytes()...)
 
 	wkcBytes := make([]byte, 2)
 	binary.LittleEndian.PutUint16(wkcBytes, e.WKC)
