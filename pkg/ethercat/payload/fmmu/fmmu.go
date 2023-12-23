@@ -1,6 +1,8 @@
 package fmmu
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+)
 
 type FMMU struct {
 	LogStart     uint32
@@ -49,6 +51,9 @@ func (f FMMU) Bytes() []byte {
 		activateBits |= 0b1
 	}
 	result = append(result, activateBits)
+
+	// The length of the DataGram should be 16 bytes, so padding is required.
+	result = append(result, []byte{0, 0, 0}...)
 
 	return result
 }
