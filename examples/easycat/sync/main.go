@@ -51,6 +51,7 @@ func main() {
 	sync()
 }
 
+// 同期状態解除する
 func clear() {
 	d = &datagram.Datagram{
 		Command: command.BRD,
@@ -67,13 +68,9 @@ func clear() {
 		Command: command.BWR,
 		Index:   uint8(index),
 		Address: uint32(0x00000800),
-		LRCM:    datagram.NewLrcm(false, false, 64),
+		LRCM:    datagram.NewLrcm(false, false, 32),
 		IRQ:     uint16(0x0000),
 		Data: payload.BasicPayload{Data: []byte{
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -86,38 +83,38 @@ func clear() {
 
 func sync() {
 	// SM
-sm = &syncmanager.SyncManager{
-	Start:  0x1000,
-	Length: 0x0020,
-	CtrlStatus: syncmanager.CtrlStatus{
-		InVisibleBufferState:     0,
-		VisibleBufferBufferState: 0,
-		CanReadIRQ:               false,
-		CanWriteIRQ:              false,
-		IsTriggerWatchdog:        true,
-		IsPdiIRQ:                 true,
-		IsEcatIRQ:                false,
-		Access:                   0x1,
-		OpMode:                   0,
-	},
-	Enable: syncmanager.Enable{
-		IsRepeatAcknowledge: false,
-		IsDeactivate:        false,
-		IsLatchChangePDI:    false,
-		IsLatchChangeECAT:   false,
-		IsRepeatRequest:     false,
-		IsEnable:            true,
-	},
-}
-d = &datagram.Datagram{
-	Command: command.APWR,
-	Index:   uint8(index),
-	Address: uint32(0x00000800),
-	LRCM:    datagram.NewLrcm(false, false, 8),
-	IRQ:     uint16(0x0000),
-	Data:    sm,
-	WKC:     uint16(0x0000),
-}
+	sm = &syncmanager.SyncManager{
+		Start:  0x1000,
+		Length: 0x0020,
+		CtrlStatus: syncmanager.CtrlStatus{
+			InVisibleBufferState:     0,
+			VisibleBufferBufferState: 0,
+			CanReadIRQ:               false,
+			CanWriteIRQ:              false,
+			IsTriggerWatchdog:        true,
+			IsPdiIRQ:                 true,
+			IsEcatIRQ:                false,
+			Access:                   0x1,
+			OpMode:                   0,
+		},
+		Enable: syncmanager.Enable{
+			IsRepeatAcknowledge: false,
+			IsDeactivate:        false,
+			IsLatchChangePDI:    false,
+			IsLatchChangeECAT:   false,
+			IsRepeatRequest:     false,
+			IsEnable:            true,
+		},
+	}
+	d = &datagram.Datagram{
+		Command: command.APWR,
+		Index:   uint8(index),
+		Address: uint32(0x00000800),
+		LRCM:    datagram.NewLrcm(false, false, 8),
+		IRQ:     uint16(0x0000),
+		Data:    sm,
+		WKC:     uint16(0x0000),
+	}
 	handler(d)
 
 	sm = &syncmanager.SyncManager{
@@ -150,118 +147,6 @@ d = &datagram.Datagram{
 		LRCM:    datagram.NewLrcm(false, false, 8),
 		IRQ:     uint16(0x0000),
 		Data:    sm,
-		WKC:     uint16(0x0000),
-	}
-	handler(d)
-
-	sm = &syncmanager.SyncManager{
-		Start:  0x1200,
-		Length: 0x0020,
-		CtrlStatus: syncmanager.CtrlStatus{
-			InVisibleBufferState:     0,
-			VisibleBufferBufferState: 0,
-			CanReadIRQ:               false,
-			CanWriteIRQ:              false,
-			IsTriggerWatchdog:        true,
-			IsPdiIRQ:                 true,
-			IsEcatIRQ:                false,
-			Access:                   0x0,
-			OpMode:                   0,
-		},
-		Enable: syncmanager.Enable{
-			IsRepeatAcknowledge: false,
-			IsDeactivate:        false,
-			IsLatchChangePDI:    false,
-			IsLatchChangeECAT:   false,
-			IsRepeatRequest:     false,
-			IsEnable:            true,
-		},
-	}
-	d = &datagram.Datagram{
-		Command: command.APWR,
-		Index:   uint8(index),
-		Address: uint32(0x00000810),
-		LRCM:    datagram.NewLrcm(false, false, 8),
-		IRQ:     uint16(0x0000),
-		Data:    sm,
-		WKC:     uint16(0x0000),
-	}
-	handler(d)
-
-	sm = &syncmanager.SyncManager{
-		Start:  0x1300,
-		Length: 0x0020,
-		CtrlStatus: syncmanager.CtrlStatus{
-			InVisibleBufferState:     0,
-			VisibleBufferBufferState: 0,
-			CanReadIRQ:               false,
-			CanWriteIRQ:              false,
-			IsTriggerWatchdog:        true,
-			IsPdiIRQ:                 true,
-			IsEcatIRQ:                false,
-			Access:                   0x0,
-			OpMode:                   0,
-		},
-		Enable: syncmanager.Enable{
-			IsRepeatAcknowledge: false,
-			IsDeactivate:        false,
-			IsLatchChangePDI:    false,
-			IsLatchChangeECAT:   false,
-			IsRepeatRequest:     false,
-			IsEnable:            true,
-		},
-	}
-	d = &datagram.Datagram{
-		Command: command.APWR,
-		Index:   uint8(index),
-		Address: uint32(0x00000818),
-		LRCM:    datagram.NewLrcm(false, false, 8),
-		IRQ:     uint16(0x0000),
-		Data:    sm,
-		WKC:     uint16(0x0000),
-	}
-	handler(d)
-
-	fm = &fmmu.FMMU{
-		LogStart:     0,
-		LogLength:    0x0020,
-		LogStartBit:  0,
-		LogEndBit:    0x07,
-		PhysStart:    0x1300,
-		PhysStartBit: 0,
-		AbleUseRead:  false,
-		AbleUseWrite: true,
-		IsActivate:   true,
-	}
-	d = &datagram.Datagram{
-		Command: command.APWR,
-		Index:   uint8(index),
-		Address: uint32(0x00000630),
-		LRCM:    datagram.NewLrcm(false, false, 16),
-		IRQ:     uint16(0x0000),
-		Data:    fm,
-		WKC:     uint16(0x0000),
-	}
-	handler(d)
-
-	fm = &fmmu.FMMU{
-		LogStart:     0,
-		LogLength:    0x0020,
-		LogStartBit:  0,
-		LogEndBit:    0x07,
-		PhysStart:    0x1200,
-		PhysStartBit: 0,
-		AbleUseRead:  true,
-		AbleUseWrite: true,
-		IsActivate:   true,
-	}
-	d = &datagram.Datagram{
-		Command: command.APWR,
-		Index:   uint8(index),
-		Address: uint32(0x00000620),
-		LRCM:    datagram.NewLrcm(false, false, 16),
-		IRQ:     uint16(0x0000),
-		Data:    fm,
 		WKC:     uint16(0x0000),
 	}
 	handler(d)

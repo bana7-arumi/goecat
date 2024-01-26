@@ -52,17 +52,14 @@ func main() {
 			Command: command.LWR,
 			Index:   uint8(index),
 			Address: uint32(0x00000000),
-			LRCM:    datagram.NewLrcm(true, false, 64),
+			LRCM:    datagram.NewLrcm(true, false, 32),
 			IRQ:     uint16(0x0000),
 			Data: payload.BasicPayload{Data: []byte{
 				led, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
-				led, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0}},
+			}},
 			WKC: uint16(0x0000),
 		}
 
@@ -71,17 +68,14 @@ func main() {
 			Command: command.LRD,
 			Index:   uint8(index),
 			Address: uint32(0x00000000),
-			LRCM:    datagram.NewLrcm(true, false, 64),
+			LRCM:    datagram.NewLrcm(true, false, 32),
 			IRQ:     uint16(0x0000),
 			Data: payload.BasicPayload{Data: []byte{
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0}},
+			}},
 			WKC: uint16(0),
 		}
 
