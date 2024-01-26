@@ -25,13 +25,12 @@ var (
 
 	index       uint8   = 0 // ECAT Index
 	led         uint8   = 0 // EasyCAT LED
-	intervalSec float64 = 0.02
+	intervalSec float64 = 0.003
 	intervalSum float64 = 0.00
 )
 
 const (
-	LED_MAX        uint8 = 0x0f
-	ECAT_INDEX_MAX uint8 = 255
+	LED_MAX uint8 = 0x0f
 )
 
 func main() {
@@ -48,14 +47,18 @@ func main() {
 
 	// LEDの値を規定時間経過で+1する
 	// LEDの値が0x00 ~ 0x0fになるまで処理を行う
-	for led <= LED_MAX {
+	for {
 		ecatDatagram1 := datagram.Datagram{
 			Command: command.LWR,
 			Index:   uint8(index),
 			Address: uint32(0x00000000),
-			LRCM:    datagram.NewLrcm(true, false, 32),
+			LRCM:    datagram.NewLrcm(true, false, 64),
 			IRQ:     uint16(0x0000),
 			Data: payload.BasicPayload{Data: []byte{
+				led, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
 				led, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
@@ -68,9 +71,13 @@ func main() {
 			Command: command.LRD,
 			Index:   uint8(index),
 			Address: uint32(0x00000000),
-			LRCM:    datagram.NewLrcm(true, false, 32),
+			LRCM:    datagram.NewLrcm(true, false, 64),
 			IRQ:     uint16(0x0000),
 			Data: payload.BasicPayload{Data: []byte{
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0,
@@ -82,7 +89,7 @@ func main() {
 		ecatDatagram3 := datagram.Datagram{
 			Command: command.BRD,
 			Index:   uint8(index),
-			Address: uint32(0x00003001),
+			Address: uint32(0x00000000),
 			LRCM:    datagram.NewLrcm(false, false, 1),
 			IRQ:     uint16(0x0000),
 			Data:    payload.BasicPayload{Data: []byte{0}},
@@ -102,10 +109,11 @@ func main() {
 		time.Sleep(time.Duration(intervalSec * float64(time.Second)))
 		// 次のloopに向けたセットアップ処理
 		intervalSum += intervalSec
-		if intervalSum >= 3.0 {
+		index++
+		if intervalSum >= 1.0 {
 			intervalSum = 0.0
-			led++
-			fmt.Printf("3秒経過 => Next LED Value: %d\n", led)
+			led = (led + 1) % 0x10
+			fmt.Printf("1秒経過 => Next LED Value: %d\n", led)
 		}
 	}
 }
